@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evair</title>
+    <script src="https://rtcmulticonnection.herokuapp.com/dist/RTCMultiConnection.min.js"></script>
+    <script src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <script>
+        var connection = new RTCMultiConnection();
+        
+        // this line is VERY_important
+        connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
+        
+        // if you want audio+video conferencing
+        connection.session = {
+            audio: true,
+            video: true
+        };
+
+        connection.onstream = function (event) {
+            console.log(event)
+            var video = event.mediaElement;
+            video.removeAttribute('controls');
+            var personDiv = document.createElement('div');
+            personDiv.id = event.userid;
+            personDiv.className = 'person';
+            personDiv.appendChild(video);
+            document.body.appendChild(personDiv);
+        };
+        
+        connection.onleave = function(event) {
+            console.log(event)
+            var person = document.getElementById(event.userid);
+            person.remove();
+        };
+
+        connection.openOrJoin('asdo8yohjn,amfs');
+    </script>
+</body>
+</html>
