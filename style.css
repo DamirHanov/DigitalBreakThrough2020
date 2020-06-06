@@ -1,24 +1,34 @@
 .person {
-  width: 200px;
-  height: 200px;
+  width: 128px;
+  height: 128px;
   overflow: hidden;
-  border-radius: 100px;
+  border-radius: 100%;
   display: flex;
   align-content: center;
   justify-content: center;
-  position: absolute
+  position: absolute;
+  box-shadow: none;
+  transition: box-shadow 0.5s ease-in;
+  z-index: 9;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
 }
 
-.person video {
-  object-fit: cover;
+.person.speaking {
+  box-shadow: 0 0 0 1.5rem rgba(0,0,0, 0.1),
+              0 0 0 3.5rem rgba(0,0,0, 0.1),
+              0 0 0 6rem rgba(0,0,0, 0.1);
 }
+
 
 .decor {
-  width: 200px;
-  height: 200px;
+  width: 128px;
+  height: 128px;
   overflow: hidden;
   display: flex;
   align-content: center;
   justify-content: center;
-  position: absolute
+  position: absolute;
+  box-shadow: none;
+  transition: box-shadow 0.5s ease-in;
 }

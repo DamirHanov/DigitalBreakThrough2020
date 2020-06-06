@@ -6,34 +6,30 @@
     <title>Evair</title>
     <script src="https://rtcmulticonnection.herokuapp.com/dist/RTCMultiConnection.min.js"></script>
     <script src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js"></script>
+    <script src="audio-context.js"></script>
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
     <button id="DecorAddButton"></button>
     <div id="decorations">
         <div id="fireplace" class="decor">
-            <img src="./images/fireplace.png" class="decor">
+            <img src="./images/fireplace.png">
         </div>
         <div id="cat" class="decor">
-            <img src="./images/cat.jpeg" class="decor">
+            <img src="./images/cat.jpeg">
         </div>
     </div>
+    <script src="./decor.js"></script>
     <script>
         var connection = new RTCMultiConnection();
-        
-        // this line is VERY_important
         connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
-        
-        // if you want audio+video conferencing
         connection.session = {
             audio: true,
             video: true,
             data: true
         };
 
-
         connection.onstream = function (event) {
-            console.log(event)
             var video = event.mediaElement;
             video.removeAttribute('controls');
             var personDiv = document.createElement('div');
@@ -41,11 +37,17 @@
             personDiv.className = 'person';
             personDiv.appendChild(video);
             document.body.appendChild(personDiv);
-            
-            dragElement(document.getElementById(connection.userid));
+
+            if (event.userid == connection.userid) {
+                var myPerson = document.getElementById(connection.userid);
+                myPerson.style.zIndex = 10;
+                myPerson.style.cursor = 'move';
+                dragElement(myPerson);
+            }
+
+            initAudioContext(event.stream, volume => onVolumeChange(event.userid, volume));
         };
 
-        
 
         connection.onmessage = function(event) {
             var sender = event.userid;
@@ -55,10 +57,18 @@
             person.style.top = event.data.top;
             person.style.left = event.data.left;
         };
-        
-        
+
+        function onVolumeChange(user, volume) {
+            var personDiv = document.getElementById(user);
+
+            if (volume > 7) {
+                personDiv.classList.add('speaking')
+            } else {
+                personDiv.classList.remove('speaking')
+            }
+        };
+
         connection.onleave = function(event) {
-            console.log(event)
             var person = document.getElementById(event.userid);
             person.remove();
         };
@@ -102,8 +112,8 @@
             }
         }
 
-        dragElement(document.getElementById("fireplace"));
-        dragElement(document.getElementById("cat"));
+        modifiedDragDrop(document.getElementById("fireplace"));
+        modifiedDragDrop(document.getElementById("cat"));
         connection.openOrJoin('asdo8yohjn,amfs');
     </script>
 </body>
