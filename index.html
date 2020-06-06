@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <button id="DecorAddButton">Добавить объект</button>
+    <button id="DecorAddButton">Редактор уровня</button>
     <div id="decorations">
         <div id="fireplace" class="decor">
             <img src="./images/fireplace.png">
@@ -21,7 +21,14 @@
         </div>
     </div>
     <div id='context'>
+        <div>Сазонов Елисей Артёмович</div>
+        <div>Ведущий разработчик</div>
+        <div>Компания Бирюзовая Луна</div>
         <button id='btn' class="btn">Пригласить в приватную беседу</button>
+        <div>Контакты:</div>
+        <div>Почта</div>
+        <div>ВКонтакте</div>
+        <div>Телеграм</div>
     </div>
     <script src="./decor.js"></script>
     <script>
@@ -64,6 +71,8 @@
                 myPerson.style.cursor = 'move';
                 dragElement(myPerson);
                 initContextMenu(myPerson);
+
+                sendMyPos(myPerson);
             }
             else{
                 var person = document.getElementById(event.userid);
@@ -99,10 +108,10 @@
             }
         }
         
-        setInterval(getMessage, 2500);
-        connection.onmessage = getMessage;
+        
+        connection.onmessage = getData;
 
-        function getMessage(event) {
+        function getData(event) {
             var sender = event.userid;
             var senderFullName = event.extra.fullName;
 
@@ -128,6 +137,19 @@
                 person.firstChild.volume = volume;
             }
         };
+
+        function sendMyPos(myPerson) {
+            setInterval(sendData, 2500);
+
+            function sendData(event) {
+                connection.send({
+                    id: myPerson.id,
+                    top: myPerson.style.top,
+                    left: myPerson.style.left
+                });
+            }
+        }
+        
 
         function distanceBetweenElems(elem1, elem2) {
             var e1Rect = elem1.getBoundingClientRect();
