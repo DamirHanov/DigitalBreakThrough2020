@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+    <div id='debug'>Debug</div>
     <script>
         var connection = new RTCMultiConnection();
         connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
@@ -21,6 +22,7 @@
 
         connection.onstream = function (event) {
             var video = event.mediaElement;
+            video.removeAttribute('volume');
             video.removeAttribute('controls');
             var personDiv = document.createElement('div');
             personDiv.id = event.userid;
@@ -28,25 +30,57 @@
             personDiv.appendChild(video);
             document.body.appendChild(personDiv);
 
+            initAudioContext(event.stream, volume => onVolumeChange(event.userid, volume));
+            
             if (event.userid == connection.userid) {
                 var myPerson = document.getElementById(connection.userid);
                 myPerson.style.zIndex = 10;
                 myPerson.style.cursor = 'move';
                 dragElement(myPerson);
             }
-
-            initAudioContext(event.stream, volume => onVolumeChange(event.userid, volume));
         };
-
 
         connection.onmessage = function(event) {
             var sender = event.userid;
             var senderFullName = event.extra.fullName;
 
-            var person = document.getElementById(event.data.id);
-            person.style.top = event.data.top;
-            person.style.left = event.data.left;
+            
+            var myPerson = document.getElementById(connection.userid);
+            var debug = document.getElementById('debug');
+            debug.innerText = 'Пользователи2: ' + document.getElementsByClassName('person').length + '\n';
+
+            if (event.userid != connection.userid) {
+                var person = document.getElementById(event.data.id);
+                person.style.top = event.data.top;
+                person.style.left = event.data.left;
+
+                var maxDist = 1000.0;
+                var minDist = 0.0;
+                var maxVolume = 1.0;
+                var minVolume = 0.0;
+
+                var dist = distanceBetweenElems(myPerson, person);
+                var newDist = dist;
+                if (newDist > maxDist) {
+                    newDist = maxDist;
+                }
+
+                var volume = minVolume + (newDist - minDist) * (maxVolume - minVolume) / (maxDist - minDist);
+                volume = 1.0 - volume;
+                person.firstChild.volume = volume;
+
+                debug.innerText += person.id + ' : ' + dist + ' : ' + volume + '\n';
+            }
         };
+
+        function distanceBetweenElems(elem1, elem2) {
+            var e1Rect = elem1.getBoundingClientRect();
+            var e2Rect = elem2.getBoundingClientRect();
+            var dx = (e1Rect.left+(e1Rect.right-e1Rect.left)/2) - (e2Rect.left+(e2Rect.right-e2Rect.left)/2);
+            var dy = (e1Rect.top+(e1Rect.bottom-e1Rect.top)/2) - (e2Rect.top+(e2Rect.bottom-e2Rect.top)/2);
+            var dist = Math.sqrt(dx * dx + dy * dy);
+            return dist;
+        }
 
         function onVolumeChange(user, volume) {
             var personDiv = document.getElementById(user);
@@ -94,6 +128,33 @@
                     top: elmnt.style.top,
                     left: elmnt.style.left
                 });
+
+
+
+                var myPerson = document.getElementById(connection.userid);
+                var debug = document.getElementById('debug');
+                var persons = document.getElementsByClassName('person');
+                debug.innerText = 'Пользователи: ' + persons.length + '\n';
+                Array.from(persons).forEach(person => {
+                    if (person.id != connection.userid) {
+                        var maxDist = 1000.0;
+                        var minDist = 0.0;
+                        var maxVolume = 1.0;
+                        var minVolume = 0.0;
+
+                        var dist = distanceBetweenElems(myPerson, person);
+                        var newDist = dist;
+                        if (newDist > maxDist) {
+                            newDist = maxDist;
+                        }
+
+                        var volume = minVolume + (newDist - minDist) * (maxVolume - minVolume) / (maxDist - minDist);
+                        volume = 1.0 - volume;
+                        person.firstChild.volume = volume;
+
+                        debug.innerText += person.id + ' : ' + dist + ' : ' + volume + '\n';
+                    }
+                });
             }
 
             function closeDragElement() {
@@ -105,5 +166,6 @@
 
         connection.openOrJoin('asdo8yohjn,amfs');
     </script>
+    
 </body>
 </html>
