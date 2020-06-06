@@ -6,6 +6,7 @@ body {
   width: 2000px;
   height: 2000px;
   background-image: url('images/1920x1200_13831_[www.ArtFile.ru].jpg');
+  background-repeat: no-repeat;
 }
 
 .person {
