@@ -11,11 +11,7 @@
 <body>
     <script>
         var connection = new RTCMultiConnection();
-        
-        // this line is VERY_important
         connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
-        
-        // if you want audio+video conferencing
         connection.session = {
             audio: true,
             video: true,
@@ -32,11 +28,12 @@
             personDiv.className = 'person';
             personDiv.appendChild(video);
             document.body.appendChild(personDiv);
-            
-            dragElement(document.getElementById(connection.userid));
+
+            var myPerson = document.getElementById(connection.userid);
+            myPerson.style.zIndex = 1;
+            dragElement(myPerson);
         };
 
-        
 
         connection.onmessage = function(event) {
             var sender = event.userid;
