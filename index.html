@@ -7,11 +7,11 @@
     <script src="https://rtcmulticonnection.herokuapp.com/dist/RTCMultiConnection.min.js"></script>
     <script src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js"></script>
     <script src="audio-context.js"></script>
+    <script src="person-actions.js"></script>
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div id='debug'>Debug</div>
-    <button id="DecorAddButton"></button>
+    <button id="DecorAddButton">Добавить объект</button>
     <div id="decorations">
         <div id="fireplace" class="decor">
             <img src="./images/fireplace.png">
@@ -32,33 +32,45 @@
 
         connection.onstream = function (event) {
             var video = event.mediaElement;
+
             video.removeAttribute('volume');
             video.removeAttribute('controls');
             var personDiv = document.createElement('div');
             personDiv.id = event.userid;
             personDiv.className = 'person';
+
+            personDiv.onclick = onClickOnPerson; // person-actions.js
+
+            var r = Math.floor(Math.random() * 256);
+            var g = Math.floor(Math.random() * 256);
+            var b = Math.floor(Math.random() * 256);
+            personDiv.style.setProperty('--r', r);
+            personDiv.style.setProperty('--g', g);
+            personDiv.style.setProperty('--b', b);
+            personDiv.style.top = 1000 - 64 + 'px';
+            personDiv.style.left = 1000 - 64 + 'px';
+            
             personDiv.appendChild(video);
             document.body.appendChild(personDiv);
 
-            initAudioContext(event.stream, volume => onVolumeChange(event.userid, volume));
-            
+            window.scroll(1000 - 64 - window.innerWidth / 2, 1000 - 64 - window.innerHeight / 2);
+
             if (event.userid == connection.userid) {
                 var myPerson = document.getElementById(connection.userid);
                 myPerson.style.zIndex = 10;
                 myPerson.style.cursor = 'move';
+
                 dragElement(myPerson);
             }
+
+            initAudioContext(event.stream, onVolumeChange(event.userid));
         };
 
         connection.onmessage = function(event) {
             var sender = event.userid;
             var senderFullName = event.extra.fullName;
 
-            
             var myPerson = document.getElementById(connection.userid);
-            var debug = document.getElementById('debug');
-            debug.innerText = 'Пользователи2: ' + document.getElementsByClassName('person').length + '\n';
-
             if (event.userid != connection.userid) {
                 var person = document.getElementById(event.data.id);
                 person.style.top = event.data.top;
@@ -67,7 +79,7 @@
                 var maxDist = 1000.0;
                 var minDist = 0.0;
                 var maxVolume = 1.0;
-                var minVolume = 0.0;
+                var minVolume = 0.5;
 
                 var dist = distanceBetweenElems(myPerson, person);
                 var newDist = dist;
@@ -78,8 +90,6 @@
                 var volume = minVolume + (newDist - minDist) * (maxVolume - minVolume) / (maxDist - minDist);
                 volume = 1.0 - volume;
                 person.firstChild.volume = volume;
-
-                debug.innerText += person.id + ' : ' + dist + ' : ' + volume + '\n';
             }
         };
 
@@ -92,15 +102,21 @@
             return dist;
         }
 
-        function onVolumeChange(user, volume) {
-            var personDiv = document.getElementById(user);
+        function onVolumeChange(user) {
+            return function(volume, context) {
+                var personDiv = document.getElementById(user);
+                if (!personDiv) {
+                    context.close();
+                    return;
+                }
 
-            if (volume > 7) {
-                personDiv.classList.add('speaking')
-            } else {
-                personDiv.classList.remove('speaking')
+                if (volume > 7) {
+                    personDiv.classList.add('speaking')
+                } else {
+                    personDiv.classList.remove('speaking')
+                }
             }
-        };
+        }
 
         connection.onleave = function(event) {
             var person = document.getElementById(event.userid);
@@ -112,6 +128,57 @@
             
             elmnt.onmousedown = dragMouseDown;
 
+            var screenDrag = false;
+
+            function dragScreen() {
+                var tol = 4;
+                var left = parseInt(elmnt.style.left),
+                    top = parseInt(elmnt.style.top);
+                
+                // console.info(left, window.scrollX + window.innerWidth - 128 - tol)
+
+                if (left >= window.scrollX + window.innerWidth - 128 - tol) {
+                    console.info('right', left)
+                    if (left >= 2000 - 128) {
+                        elmnt.style.left = 2000 - 128 + 'px';
+                        console.log('break;')
+                    } else {
+                        elmnt.style.left = left + tol + 'px';
+                        window.scrollBy(tol, 0);
+                    }
+                } else if (left <= window.scrollX + 2 * tol) {
+                    console.info('left')
+                    if (window.scrollX === 0) {
+                        elmnt.style.left = '5px';
+                    } else {
+                        elmnt.style.left = left - tol + 'px';
+                        window.scrollBy(-tol, 0);
+                    }
+                }
+
+                if (top >= window.scrollY + window.innerHeight - 128 - tol) {
+                    console.info('bottom')
+                    if (top >= 2000 - 128) {
+                        elmnt.style.top = 2000 - 128 + 'px';
+                    } else {
+                        elmnt.style.top = top + tol + 'px';
+                        window.scrollBy(0, tol);
+                    }
+                } else if (top <= window.scrollY + tol) {
+                    console.info('top')
+                    if (window.scrollY === 0) {
+                        elmnt.style.top = '5px';
+                    } else {
+                        elmnt.style.top = top - tol + 'px';
+                        window.scrollBy(0, -tol);
+                    }
+                }
+
+                if (screenDrag) {
+                    requestAnimationFrame(dragScreen);
+                }
+            }
+
             function dragMouseDown(e) {
                 e = e || window.event;
                 e.preventDefault();
@@ -119,6 +186,18 @@
                 pos4 = e.clientY;
                 document.onmouseup = closeDragElement;
                 document.onmousemove = elementDrag;
+
+                screenDrag = true;
+                requestAnimationFrame(dragScreen);
+            }
+
+            function distanceBetweenElems(elem1, elem2) {
+                var e1Rect = elem1.getBoundingClientRect();
+                var e2Rect = elem2.getBoundingClientRect();
+                var dx = (e1Rect.left+(e1Rect.right-e1Rect.left)/2) - (e2Rect.left+(e2Rect.right-e2Rect.left)/2);
+                var dy = (e1Rect.top+(e1Rect.bottom-e1Rect.top)/2) - (e2Rect.top+(e2Rect.bottom-e2Rect.top)/2);
+                var dist = Math.sqrt(dx * dx + dy * dy);
+                return dist;
             }
 
             function elementDrag(e) {
@@ -130,39 +209,38 @@
                 pos3 = e.clientX;
                 pos4 = e.clientY;
 
-                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-                
+                var top = elmnt.offsetTop - pos2,
+                    left = elmnt.offsetLeft - pos1;
+
+                elmnt.style.top = top + "px";
+                elmnt.style.left = left + "px";
+
                 connection.send({
                     id: elmnt.id,
                     top: elmnt.style.top,
                     left: elmnt.style.left
                 });
 
-
-
                 var myPerson = document.getElementById(connection.userid);
-                var debug = document.getElementById('debug');
                 var persons = document.getElementsByClassName('person');
-                debug.innerText = 'Пользователи: ' + persons.length + '\n';
                 Array.from(persons).forEach(person => {
                     if (person.id != connection.userid) {
+                        var dist = distanceBetweenElems(myPerson, person);
+
                         var maxDist = 1000.0;
                         var minDist = 0.0;
-                        var maxVolume = 1.0;
+                        var maxVolume = 0.5;
                         var minVolume = 0.0;
-
-                        var dist = distanceBetweenElems(myPerson, person);
                         var newDist = dist;
+                        
                         if (newDist > maxDist) {
                             newDist = maxDist;
                         }
 
                         var volume = minVolume + (newDist - minDist) * (maxVolume - minVolume) / (maxDist - minDist);
                         volume = 1.0 - volume;
-                        person.firstChild.volume = volume;
 
-                        debug.innerText += person.id + ' : ' + dist + ' : ' + volume + '\n';
+                        person.firstChild.volume = volume;
                     }
                 });
             }
@@ -170,6 +248,7 @@
             function closeDragElement() {
                 document.onmouseup = null;
                 document.onmousemove = null;
+                screenDrag = false;
             }
         }
 

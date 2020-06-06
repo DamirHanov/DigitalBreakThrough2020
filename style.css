@@ -1,4 +1,16 @@
+body {
+  margin: 5px;
+  padding: 0;
+  overflow: hidden;
+  border: 3px solid black;
+  width: 2000px;
+  height: 2000px;
+}
+
 .person {
+  --r: 0;
+  --g: 0;
+  --b: 0;
   width: 128px;
   height: 128px;
   overflow: hidden;
@@ -7,7 +19,9 @@
   align-content: center;
   justify-content: center;
   position: absolute;
-  box-shadow: none;
+  box-shadow: 0 0 0 0rem rgba(var(--r), var(--g), var(--b), 0.1),
+              0 0 0 0rem rgba(var(--r), var(--g), var(--b), 0.1),
+              0 0 0 0rem rgba(var(--r), var(--g), var(--b), 0.1);
   transition: box-shadow 0.5s ease-in;
   z-index: 9;
   -webkit-transform: scaleX(-1);
@@ -15,9 +29,9 @@
 }
 
 .person.speaking {
-  box-shadow: 0 0 0 1.5rem rgba(0,0,0, 0.1),
-              0 0 0 3.5rem rgba(0,0,0, 0.1),
-              0 0 0 6rem rgba(0,0,0, 0.1);
+  box-shadow: 0 0 0 0.5rem rgba(var(--r), var(--g), var(--b), 0.2),
+              0 0 0 1rem rgba(var(--r), var(--g), var(--b), 0.2),
+              0 0 0 2rem rgba(var(--r), var(--g), var(--b), 0.2);
 }
 
 

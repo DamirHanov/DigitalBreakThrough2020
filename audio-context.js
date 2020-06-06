@@ -1,6 +1,4 @@
 function initAudioContext(stream, onVolumeChange) {
-    console.log(1);
-
     var context = new AudioContext();
     var source = context.createMediaStreamSource(stream);
 
@@ -17,7 +15,7 @@ function initAudioContext(stream, onVolumeChange) {
     processorNode.onaudioprocess = function () {
         analyser.getByteFrequencyData(array);
         var averageVolume = getAverageVolume(array)
-        requestAnimationFrame(() => onVolumeChange(averageVolume));
+        requestAnimationFrame(() => onVolumeChange(averageVolume, context));
     }
 
     function getAverageVolume(array) {
