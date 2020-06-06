@@ -20,6 +20,9 @@
             <img src="./images/cat.jpeg">
         </div>
     </div>
+    <div id='context'>
+        <button id='btn' class="btn">Пригласить в приватную беседу</button>
+    </div>
     <script src="./decor.js"></script>
     <script>
         var connection = new RTCMultiConnection();
@@ -43,12 +46,45 @@
             initAudioContext(event.stream, volume => onVolumeChange(event.userid, volume));
             
             if (event.userid == connection.userid) {
-                var myPerson = document.getElementById(connection.userid);
+                var myPerson = document.getElementById(event.userid);
                 myPerson.style.zIndex = 10;
                 myPerson.style.cursor = 'move';
                 dragElement(myPerson);
+                
+                initContextMenu(myPerson);
+            }
+            else{
+                var person = document.getElementById(event.userid);
+                initContextMenu(person);
             }
         };
+
+        function initContextMenu(person) {
+            person.oncontextmenu = onRightClick;
+
+            function onRightClick(e) {
+                //e = e || window.event;
+                //e.preventDefault();
+
+                var context = document.getElementById('context');
+                context.style.visibility = 'visible';
+
+                var button = document.getElementById('btn');
+                button.onclick = routePersons;
+            }
+
+            function routePersons(e) {
+                var context = document.getElementById('context');
+                context.style.visibility = 'hidden';
+
+                // var personDiv = document.createElement('span');
+                // personDiv.id = event.userid;
+                // personDiv.className = 'line';
+                // personDiv.appendChild(video);
+                // document.body.appendChild(personDiv);
+            }
+        }
+        
 
         connection.onmessage = function(event) {
             var sender = event.userid;
@@ -76,7 +112,7 @@
                 }
 
                 var volume = minVolume + (newDist - minDist) * (maxVolume - minVolume) / (maxDist - minDist);
-                volume = 1.0 - volume;
+                volume = (maxVolume - minVolume) - volume;
                 person.firstChild.volume = volume;
 
                 debug.innerText += person.id + ' : ' + dist + ' : ' + volume + '\n';
@@ -150,7 +186,7 @@
                         var maxDist = 1000.0;
                         var minDist = 0.0;
                         var maxVolume = 1.0;
-                        var minVolume = 0.0;
+                        var minVolume = 0.6;
 
                         var dist = distanceBetweenElems(myPerson, person);
                         var newDist = dist;
@@ -159,7 +195,7 @@
                         }
 
                         var volume = minVolume + (newDist - minDist) * (maxVolume - minVolume) / (maxDist - minDist);
-                        volume = 1.0 - volume;
+                        volume = (maxVolume - minVolume) - volume;
                         person.firstChild.volume = volume;
 
                         debug.innerText += person.id + ' : ' + dist + ' : ' + volume + '\n';

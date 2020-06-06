@@ -12,6 +12,13 @@
   z-index: 9;
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
+  
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .person.speaking {
@@ -19,7 +26,6 @@
               0 0 0 3.5rem rgba(0,0,0, 0.1),
               0 0 0 6rem rgba(0,0,0, 0.1);
 }
-
 
 .decor {
   width: 128px;
@@ -31,4 +37,27 @@
   position: absolute;
   box-shadow: none;
   transition: box-shadow 0.5s ease-in;
+}
+
+#context {
+  position: absolute;
+  visibility: hidden;
+  width: 300px;
+  height: 80vh;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  background: #858585;
+}
+
+.btn {
+  width: 200px;
+  height: 36px;
+  background-color: chocolate;
+}
+
+.line {
+  width: 4px;
+  height: 4px;
+  background: darkgreen;
 }
