@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <title>Evair</title>
+    </head>
+    <body>
+        <h1>Evair!</h1>
+
+        <form action="./index.html">
+            <p>Ваше имя</p>
+            <input type="text" placeholder="Ф.И.О" id="Name">
+            <p>Ваша компания</p>
+            <input type="text" placeholder="Лучшая компания в мире" id="Company">
+            <p>Кому давать доступ к контактам?</p>
+            <input type="radio" id="Contact1" value="All">Всем<br>
+            <input type="radio" id="Contact2" value="Ask">Спрашивай каждый раз<br>
+            <input type="radio" id="Contact3" value="No">Никому<br>
+            <input type="text" id="Contact" placeholder="Ваш контакт">
+            <input type="submit" id="Enter" value="Войти!">
+        </form>
+
+        <script>
+            Enter.onclick = function() {
+                localStorage.setItem('name', Name.value);
+                localStorage.setItem('company', Company.value);
+                if(Contact1.checked) localStorage.setItem('contact_option', Contact1.value);
+                if(Contact2.checked) localStorage.setItem('contact_option', Contact2.value);
+                if(Contact3.checked) localStorage.setItem('contact_option', Contact3.value);
+                localStorage.setItem('contact', Contact.value);
+            }
+        </script>
+    </body>
+</html>

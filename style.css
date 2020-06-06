@@ -19,3 +19,16 @@
               0 0 0 3.5rem rgba(0,0,0, 0.1),
               0 0 0 6rem rgba(0,0,0, 0.1);
 }
+
+
+.decor {
+  width: 128px;
+  height: 128px;
+  overflow: hidden;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  position: absolute;
+  box-shadow: none;
+  transition: box-shadow 0.5s ease-in;
+}

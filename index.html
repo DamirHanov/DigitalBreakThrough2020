@@ -11,6 +11,16 @@
 </head>
 <body>
     <div id='debug'>Debug</div>
+    <button id="DecorAddButton"></button>
+    <div id="decorations">
+        <div id="fireplace" class="decor">
+            <img src="./images/fireplace.png">
+        </div>
+        <div id="cat" class="decor">
+            <img src="./images/cat.jpeg">
+        </div>
+    </div>
+    <script src="./decor.js"></script>
     <script>
         var connection = new RTCMultiConnection();
         connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
@@ -163,7 +173,8 @@
             }
         }
 
-
+        modifiedDragDrop(document.getElementById("fireplace"));
+        modifiedDragDrop(document.getElementById("cat"));
         connection.openOrJoin('asdo8yohjn,amfs');
     </script>
     
