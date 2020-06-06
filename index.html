@@ -31,6 +31,7 @@
             if (event.userid == connection.userid) {
                 var myPerson = document.getElementById(connection.userid);
                 myPerson.style.zIndex = 10;
+                myPerson.style.cursor = 'move';
                 dragElement(myPerson);
             }
 
