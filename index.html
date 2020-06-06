@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <button id="DecorAddButton">Редактор уровня</button>
-    <div id="decorations">
+    <button id="DecorAddButton" style="display: none;">Редактор уровня</button>
+    <div id="decorations" style="display: none;">
         <div id="fireplace" class="decor">
             <img src="./images/fireplace.png">
         </div>
@@ -31,6 +31,23 @@
         <div>Телеграм</div>
     </div>
     <script src="./decor.js"></script>
+
+    <div style="position: absolute; left: 1000px; top:100px">
+        <img width="300px" src="images/sofa-transparent-fancy-1.png" />
+    </div>
+
+    <div style="position: absolute; left: 104px; top:600px">
+        <img width="500px" src="images/129-1295942_-sala-de-reuniones-png-clipart.png" />
+    </div>
+
+    <div style="position: absolute; left: 1110px; top:1000px">
+        <img width="450px" src="images/poker-table.png" />
+    </div>
+
+    <div style="position: absolute; left: 143px; top:200px">
+        <img width="200px" src="images/26-266264_campfire-cartoon-bonfire-clip-art-black-survival-bracelet-outdoor-paracord-flint-fire.png" />
+    </div>
+
     <script>
         var connection = new RTCMultiConnection();
         connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
@@ -189,7 +206,7 @@
             var screenDrag = false;
 
             function dragScreen() {
-                var tol = 4;
+                var tol = 10;
                 var left = parseInt(elmnt.style.left),
                     top = parseInt(elmnt.style.top);
                 
