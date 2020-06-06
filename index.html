@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+    <div id="fireplace">
+        <img src="./images/fireplace.png">
+    </div>
     <script>
         var connection = new RTCMultiConnection();
         
@@ -90,7 +93,7 @@
             }
         }
 
-
+        dragElement(fireplace);
         connection.openOrJoin('asdo8yohjn,amfs');
     </script>
 </body>
