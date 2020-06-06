@@ -6,6 +6,7 @@ body {
   width: 2000px;
   height: 2000px;
   background-image: url('images/Textures_Floor_01-600x600.jpg');
+  font-family: sans-serif;
 }
 
 .person {
@@ -27,19 +28,19 @@ body {
   z-index: 9;
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
-  
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+}
+
+.material-icons {
+  vertical-align: middle;
+  margin-right: 6px;
+  margin-bottom: 4px;
+  font-size: 20px;
 }
 
 .person.speaking {
-  box-shadow: 0 0 0 0.5rem rgba(var(--r), var(--g), var(--b), 0.2),
-              0 0 0 1rem rgba(var(--r), var(--g), var(--b), 0.2),
-              0 0 0 2rem rgba(var(--r), var(--g), var(--b), 0.2);
+  box-shadow: 0 0 0 0.7rem rgba(var(--r), var(--g), var(--b), 0.2),
+              0 0 0 1.6rem rgba(var(--r), var(--g), var(--b), 0.2),
+              0 0 0 2.6rem rgba(var(--r), var(--g), var(--b), 0.2);
 }
 
 .decor {
@@ -63,17 +64,42 @@ body {
 #context {
   position: fixed;
   flex-direction: column;
-  top: 12px;
-  right: 12px;
+  top: 16px;
+  right: 16px;
   visibility: hidden;
-  width: 300px;
-  height: 80vh;
-  display: flex;
-  align-content: center;
-  justify-content: center;
-  background: rgb(34, 35, 37);
+  width: 260px;
+  height: 300px;
+  background: rgba(42, 45, 51, 0.2);
+  backdrop-filter: blur(20px);
   color: white;
   z-index: 99;
+  border-radius: 12px;
+  padding: 24px;
+  font-size: 18px;
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.5);
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+#menu {
+  position: fixed;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
+  bottom: 16px;
+  left: 50vw;
+  transform: translateX(-50%);
+  visibility: visible;
+  width: 600px;
+  height: 24px;
+  background: rgba(42, 45, 51, 0.2);
+  backdrop-filter: blur(20px);
+  color: white;
+  z-index: 99;
+  border-radius: 48px;
+  padding: 24px;
+  font-size: 18px;
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.5);
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
 }
 
 .contextEmotes {
@@ -82,8 +108,8 @@ body {
   top: -12px;
   left: 100px;
   visibility: hidden;
-  width: 300px;
-  height: 80vh;
+  width: 260px;
+  height: 300px;
   display: flex;
   align-content: center;
   justify-content: center;
@@ -92,14 +118,58 @@ body {
 }
 
 .btn {
-  width: 200px;
-  height: 36px;
-  background-color: chocolate;
+  width: 260px;
+  height: 38px;
+  background-color: #1976d2;
   color: white;
+  border: none;
+  outline: none;
+  border-radius: 8px;
+  padding: 8px;
+  margin: 20px 0px 24px 0px;
+  box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.3);
 }
 
-.line {
-  width: 4px;
-  height: 4px;
-  background: darkgreen;
+.btn:active {
+  box-shadow: none;
+}
+
+.btn:focus {
+  border: none;
+  outline: none;
+}
+
+#line {
+  visibility: hidden;
+}
+
+.link {
+  font-size: 14px;
+  padding-bottom: 4px;
+  font-family: sans-serif;
+  color: #51b2ff;
+  font-weight: 600;
+}
+
+.contacts {
+  font-size: 18px;
+  padding: 8px 0px 8px 0px;
+}
+
+.name {
+  padding-bottom: 24px;
+}
+
+.profession {
+  padding-bottom: 8px;
+  font-size: 16px;
+}
+
+.company {
+  padding-bottom: 8px;
+  font-size: 16px;
+}
+
+.sprite-shadowed {
+  filter: drop-shadow(8px 12px 6px rgb(0,0,0, 0.5));
 }

@@ -8,9 +8,12 @@
     <script src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js"></script>
     <script src="audio-context.js"></script>
     <script src="person-actions.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+    <div id='line'></div>
+
     <button id="DecorAddButton" style="display: none;">Редактор уровня</button>
     <div id="decorations" style="display: none;">
         <div id="fireplace" class="decor">
@@ -20,31 +23,36 @@
             <img src="./images/cat.jpeg">
         </div>
     </div>
-    <div id='context'>
-        <div>Сазонов Елисей Артёмович</div>
-        <div>Ведущий разработчик</div>
-        <div>Компания Бирюзовая Луна</div>
-        <button id='btn' class="btn">Пригласить в приватную беседу</button>
-        <div>Контакты:</div>
-        <div>Почта</div>
-        <div>ВКонтакте</div>
-        <div>Телеграм</div>
-    </div>
     <script src="./decor.js"></script>
 
-    <div style="position: absolute; left: 1000px; top:100px">
+    <div id='context'>
+        <div class='name'>Лебедев Артёмий Татьяныч</div>
+        <div class='profession'>Ведущий разработчик</div>
+        <div class='company'>Компания: "Бирюзовая Луна"</div>
+        <button id='btn' class="btn">Пригласить в приватную беседу</button>
+        <div class='contacts'>Контакты:</div>
+        <a href='https://www.google.com' target="_blank" class="link">Почта</a><br>
+        <a href='https://www.google.com' target="_blank" class="link">ВКонтакте</a><br>
+        <a href='https://www.google.com' target="_blank" class="link">Телеграм</a><br>
+    </div>
+    
+    <div id="menu">
+
+    </div>
+
+    <div class='sprite-shadowed' style="position: absolute; left: 1000px; top:100px">
         <img width="300px" src="images/sofa-transparent-fancy-1.png" />
     </div>
 
-    <div style="position: absolute; left: 104px; top:600px">
+    <div class='sprite-shadowed' style="position: absolute; left: 104px; top:600px">
         <img width="500px" src="images/129-1295942_-sala-de-reuniones-png-clipart.png" />
     </div>
 
-    <div style="position: absolute; left: 1110px; top:1000px">
+    <div class='sprite-shadowed' style="position: absolute; left: 1110px; top:1000px">
         <img width="450px" src="images/poker-table.png" />
     </div>
 
-    <div style="position: absolute; left: 143px; top:200px">
+    <div class='sprite-shadowed' style="position: absolute; left: 143px; top:200px">
         <img width="200px" src="images/26-266264_campfire-cartoon-bonfire-clip-art-black-survival-bracelet-outdoor-paracord-flint-fire.png" />
     </div>
 
@@ -62,10 +70,12 @@
 
             video.removeAttribute('volume');
             video.removeAttribute('controls');
+            video.oncontextmenu = function(e) {
+                return false;
+            };
             var personDiv = document.createElement('div');
             personDiv.id = event.userid;
             personDiv.className = 'person';
-
             personDiv.onclick = onClickOnPerson; // person-actions.js
 
             var r = Math.floor(Math.random() * 256);
@@ -110,11 +120,86 @@
                 context.style.visibility = 'visible';
 
                 var button = document.getElementById('btn');
+                button.style.background = '#1976d2';
+                button.innerText = 'Пригласить в приватную беседу';
+                button.onclick = routePersons;
+
+                document.body.onclick = function(e) {
+                    if (e.target == document.body) {
+                        context.style.visibility = 'hidden';
+                    }
+                    
+                };
+            }
+
+            function routePersons(e) {
+                var button = document.getElementById('btn');
+                button.innerText = 'Ожидание принятия заявки';
+                button.style.background = '#FF9800';
+
+                var myPerson = document.getElementById(connection.userid);
+                var line = document.getElementById('line');
+
+                var refreshIntervalId;
+                setTimeout(function(e) {
+                    button.innerHTML = '<span class="material-icons">https</span>Приватная связь установлена!';
+                    button.style.background = '#4caf50';
+
+                    refreshIntervalId = setInterval(connectByLine, 10);
+                }, 1500);
+
+                
+                
+                function connectByLine() {
+                    if (!person) {
+                        line.style.visibility = 'hidden';
+                        clearInterval(refreshIntervalId);
+                    }
+                    var off1 = getOffset(myPerson);
+                    var off2 = getOffset(person);
+                    var x1 = off1.left + off1.width / 2;
+                    var y1 = off1.top + off1.height / 2;
+                    var x2 = off2.left + off2.width /2 ;
+                    var y2 = off2.top + off2.width /2;
+                    var length = Math.sqrt(((x2-x1) * (x2-x1)) + ((y2-y1) * (y2-y1)));
+                    var cx = ((x1 + x2) / 2) - (length / 2);
+                    var cy = ((y1 + y2) / 2) - (5 / 2);
+                    var angle = Math.atan2((y1-y2),(x1-x2))*(180/Math.PI);
+                    line.style.cssText = 'padding:0px; margin:0px; height:5px; background:#2196f3; line-height:1px; position:absolute; left:' + cx + 'px; top:' + cy + 'px; width:' + length + 'px; -moz-transform:rotate(' + angle + 'deg); -webkit-transform:rotate(' + angle + 'deg); -o-transform:rotate(' + angle + 'deg); -ms-transform:rotate(' + angle + 'deg); transform:rotate(' + angle + 'deg);';
+                    line.style.visibility = 'visible';
+                }
+
+                function getOffset( el ) {
+                    var rect = el.getBoundingClientRect();
+                    return {
+                        left: rect.left + window.pageXOffset,
+                        top: rect.top + window.pageYOffset,
+                        width: rect.width || el.offsetWidth,
+                        height: rect.height || el.offsetHeight
+                    };
+                }
+            }
+
+
+            
+        }
+
+        function initEmotesContextMenu(person) {
+            person.oncontextmenu = onRightClick;
+
+            function onRightClick(e) {
+                //e = e || window.event;
+                //e.preventDefault();
+
+                var context = document.getElementById('contextEmotes');
+                context.style.visibility = 'visible';
+
+                var button = document.getElementById('btn');
                 button.onclick = routePersons;
             }
 
             function routePersons(e) {
-                var context = document.getElementById('context');
+                var context = document.getElementById('contextEmotes');
                 context.style.visibility = 'hidden';
 
                 // var personDiv = document.createElement('span');
@@ -262,6 +347,8 @@
                 document.onmouseup = closeDragElement;
                 document.onmousemove = elementDrag;
 
+                elmnt.style.cursor = 'none';
+
                 screenDrag = true;
                 requestAnimationFrame(dragScreen);
             }
@@ -322,6 +409,7 @@
             }
 
             function closeDragElement() {
+                elmnt.style.cursor = 'move';
                 document.onmouseup = null;
                 document.onmousemove = null;
                 screenDrag = false;
