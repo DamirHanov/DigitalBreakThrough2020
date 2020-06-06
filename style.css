@@ -5,10 +5,7 @@ body {
   border: 3px solid black;
   width: 2000px;
   height: 2000px;
-  background-image: url('images/1920x1200_13831_[www.ArtFile.ru].jpg');
-  background-repeat: no-repeat;
-
-  background: rgb(48, 49, 53);
+  background-image: url('images/Textures_Floor_01-600x600.jpg');
 }
 
 .person {
