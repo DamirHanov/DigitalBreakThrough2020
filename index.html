@@ -22,6 +22,7 @@
             data: true
         };
 
+
         connection.onstream = function (event) {
             console.log(event)
             var video = event.mediaElement;
@@ -31,9 +32,11 @@
             personDiv.className = 'person';
             personDiv.appendChild(video);
             document.body.appendChild(personDiv);
-
-            dragElement(personDiv);
+            
+            dragElement(document.getElementById(connection.userid));
         };
+
+        
 
         connection.onmessage = function(event) {
             var sender = event.userid;
