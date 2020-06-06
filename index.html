@@ -18,7 +18,8 @@
         // if you want audio+video conferencing
         connection.session = {
             audio: true,
-            video: true
+            video: true,
+            data: true
         };
 
         connection.onstream = function (event) {
@@ -30,13 +31,65 @@
             personDiv.className = 'person';
             personDiv.appendChild(video);
             document.body.appendChild(personDiv);
+
+            dragElement(personDiv);
         };
+
+        connection.onmessage = function(event) {
+            var sender = event.userid;
+            var senderFullName = event.extra.fullName;
+
+            var person = document.getElementById(event.data.id);
+            person.style.top = event.data.top;
+            person.style.left = event.data.left;
+        };
+        
         
         connection.onleave = function(event) {
             console.log(event)
             var person = document.getElementById(event.userid);
             person.remove();
         };
+
+        function dragElement(elmnt) {
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            
+            elmnt.onmousedown = dragMouseDown;
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+
+                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+                
+                connection.send({
+                    id: elmnt.id,
+                    top: elmnt.style.top,
+                    left: elmnt.style.left
+                });
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+
 
         connection.openOrJoin('asdo8yohjn,amfs');
     </script>
