@@ -7,6 +7,18 @@
   align-content: center;
   justify-content: center;
   position: absolute;
+  box-shadow: 0 0 0 0rem rgba(0,0,0, 0.1),
+              0 0 0 0rem rgba(0,0,0, 0.1),
+              0 0 0 0rem rgba(0,0,0, 0.1);
+  transition: box-shadow 0.5s ease-in;
+  cursor: move;
+  z-index: 9;
+}
+
+.person.speaking {
+  box-shadow: 0 0 0 0.5rem rgba(0,0,0, 0.2),
+              0 0 0 1rem rgba(0,0,0, 0.2),
+              0 0 0 2rem rgba(0,0,0, 0.2);
 }
 
 .person video {

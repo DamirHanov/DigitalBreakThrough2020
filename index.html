@@ -6,6 +6,7 @@
     <title>Evair</title>
     <script src="https://rtcmulticonnection.herokuapp.com/dist/RTCMultiConnection.min.js"></script>
     <script src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js"></script>
+    <script src="audio-context.js"></script>
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -18,9 +19,7 @@
             data: true
         };
 
-
         connection.onstream = function (event) {
-            console.log(event)
             var video = event.mediaElement;
             video.removeAttribute('controls');
             var personDiv = document.createElement('div');
@@ -29,9 +28,13 @@
             personDiv.appendChild(video);
             document.body.appendChild(personDiv);
 
-            var myPerson = document.getElementById(connection.userid);
-            myPerson.style.zIndex = 1;
-            dragElement(myPerson);
+            if (event.userid == connection.userid) {
+                var myPerson = document.getElementById(connection.userid);
+                myPerson.style.zIndex = 10;
+                dragElement(myPerson);
+            }
+
+            initAudioContext(event.stream, volume => onVolumeChange(event.userid, volume));
         };
 
 
@@ -43,10 +46,18 @@
             person.style.top = event.data.top;
             person.style.left = event.data.left;
         };
-        
-        
+
+        function onVolumeChange(user, volume) {
+            var personDiv = document.getElementById(user);
+
+            if (volume > 7) {
+                personDiv.classList.add('speaking')
+            } else {
+                personDiv.classList.remove('speaking')
+            }
+        };
+
         connection.onleave = function(event) {
-            console.log(event)
             var person = document.getElementById(event.userid);
             person.remove();
         };
