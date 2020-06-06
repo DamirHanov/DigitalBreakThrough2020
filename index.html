@@ -9,8 +9,14 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div id="fireplace">
-        <img src="./images/fireplace.png">
+    <button id="DecorAddButton"></button>
+    <div id="decorations">
+        <div id="fireplace" class="decor">
+            <img src="./images/fireplace.png" class="decor">
+        </div>
+        <div id="cat" class="decor">
+            <img src="./images/cat.jpeg" class="decor">
+        </div>
     </div>
     <script>
         var connection = new RTCMultiConnection();
@@ -96,7 +102,8 @@
             }
         }
 
-        dragElement(fireplace);
+        dragElement(document.getElementById("fireplace"));
+        dragElement(document.getElementById("cat"));
         connection.openOrJoin('asdo8yohjn,amfs');
     </script>
 </body>
