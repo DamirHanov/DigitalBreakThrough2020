@@ -56,15 +56,13 @@
             personDiv.appendChild(video);
             document.body.appendChild(personDiv);
 
-            window.scroll(1000 - 64 - window.innerWidth / 2, 1000 - 64 - window.innerHeight / 2);
-
             if (event.userid == connection.userid) {
+                window.scroll(1000 - 64 - window.innerWidth / 2, 1000 - 64 - window.innerHeight / 2);
+
                 var myPerson = document.getElementById(event.userid);
                 myPerson.style.zIndex = 10;
                 myPerson.style.cursor = 'move';
-
                 dragElement(myPerson);
-                
                 initContextMenu(myPerson);
             }
             else{
@@ -101,8 +99,10 @@
             }
         }
         
+        setInterval(getMessage, 2500);
+        connection.onmessage = getMessage;
 
-        connection.onmessage = function(event) {
+        function getMessage(event) {
             var sender = event.userid;
             var senderFullName = event.extra.fullName;
 
