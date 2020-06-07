@@ -22,7 +22,8 @@ body {
   align-content: center;
   justify-content: center;
   position: absolute;
-  box-shadow: 0 0 0 0rem rgba(var(--r), var(--g), var(--b), 0.1),
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2),
+              0 0 0 0rem rgba(var(--r), var(--g), var(--b), 0.1),
               0 0 0 0rem rgba(var(--r), var(--g), var(--b), 0.1),
               0 0 0 0rem rgba(var(--r), var(--g), var(--b), 0.1);
   transition: box-shadow 0.5s ease-in;
@@ -39,7 +40,8 @@ body {
 }
 
 .person.speaking {
-  box-shadow: 0 0 0 0.7rem rgba(var(--r), var(--g), var(--b), 0.2),
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2),
+              0 0 0 0.7rem rgba(var(--r), var(--g), var(--b), 0.2),
               0 0 0 1.6rem rgba(var(--r), var(--g), var(--b), 0.2),
               0 0 0 2.6rem rgba(var(--r), var(--g), var(--b), 0.2);
 }
@@ -57,6 +59,7 @@ body {
   background: rgba(42, 45, 51, 0.5);
   backdrop-filter: blur(20px);
   border-radius: 12px;
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.5);
 }
 
 .decor > img {
