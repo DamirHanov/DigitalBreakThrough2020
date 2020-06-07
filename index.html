@@ -48,6 +48,8 @@
         <img src='https://discord.com/assets/263a7f4eeb6f69e46d969fa479188592.svg' class='emote'>
         <img src='https://discord.com/assets/f3e307960b1c81de130c429034802618.svg' class='emote'>
     </div>
+
+    <img id='emoteFloat' class='emote float'>
     
     <div id="menu">
         <button id='btnCamera' class="btn controls" style="background: #4caf50;">
@@ -196,6 +198,7 @@
             person.oncontextmenu = onRightClick;
 
             function onRightClick(e) {
+                var emoteFloat = document.getElementById('emoteFloat');
                 var context = document.getElementById('contextEmotes');
                 context.style.visibility = 'visible';
                 var rect = person.getBoundingClientRect();
@@ -203,8 +206,18 @@
                 context.style.top = rect.top - 32 + 'px';
 
                 document.body.onclick = function(e) {
-                    if (e.target == document.body) {
+                    if (e.target != context) {
                         context.style.visibility = 'hidden';
+                        if (e.target.className == 'emote') {
+                            emoteFloat.src = e.target.src;
+                            emoteFloat.style.opacity = '1';
+                            emoteFloat.style.left = rect.left + 110 + 'px';
+                            emoteFloat.style.top = rect.top - 36 + 'px';
+
+                            setTimeout(function(e) {
+                                emoteFloat.style.opacity = '0';
+                            }, 1000);
+                        }
                     }
                 };
             }
