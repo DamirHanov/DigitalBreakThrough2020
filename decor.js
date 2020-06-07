@@ -1,11 +1,12 @@
 function modifiedDragDrop(elem) {
-  console.log(elem);
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
   var twin;
+  var counter = 0;
 
   elem.onmousedown = dragMouseDown;
 
   function dragMouseDown(e) {
+    counter++;
     e = e || window.event;
     e.preventDefault();
     pos3 = e.clientX;
@@ -20,7 +21,6 @@ function modifiedDragDrop(elem) {
   }
 
   function elementDrag(e) {
-    console.log('drag')
     e = e || window.event;
     e.preventDefault();
     twin.style.top = e.pageY - twin.offsetHeight / 2 + "px";
@@ -30,9 +30,12 @@ function modifiedDragDrop(elem) {
   function closeDragElement() {
     document.onmouseup = null;
     document.onmousemove = null;
+    var id = [connection.userid, counter].join('_');
+    console.log(id);
 
     setInterval(() => {
       connection.send({
+        id: id,
         decor: true,
         src: twin.src,
         width: twin.style.width,

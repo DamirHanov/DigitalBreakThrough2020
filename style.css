@@ -22,7 +22,8 @@ body {
   align-content: center;
   justify-content: center;
   position: absolute;
-  box-shadow: 0 0 0 0rem rgba(var(--r), var(--g), var(--b), 0.1),
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2),
+              0 0 0 0rem rgba(var(--r), var(--g), var(--b), 0.1),
               0 0 0 0rem rgba(var(--r), var(--g), var(--b), 0.1),
               0 0 0 0rem rgba(var(--r), var(--g), var(--b), 0.1);
   transition: box-shadow 0.5s ease-in;
@@ -39,7 +40,8 @@ body {
 }
 
 .person.speaking {
-  box-shadow: 0 0 0 0.7rem rgba(var(--r), var(--g), var(--b), 0.2),
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2),
+              0 0 0 0.7rem rgba(var(--r), var(--g), var(--b), 0.2),
               0 0 0 1.6rem rgba(var(--r), var(--g), var(--b), 0.2),
               0 0 0 2.6rem rgba(var(--r), var(--g), var(--b), 0.2);
 }
@@ -54,19 +56,22 @@ body {
   align-content: center;
   padding: 24px;
   z-index: 11;
-  background: rgba(42, 45, 51, 0.5);
+  background: rgba(42, 45, 51, 0.2);
   backdrop-filter: blur(20px);
   border-radius: 12px;
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.5);
 }
 
 .decor > img {
   max-width: 128px;
   max-height: 128px;
+  filter: drop-shadow(0px 2px 16px rgba(0, 0, 0, 0.3));
 }
 
 
 .placed-decor {
   position: absolute;
+  filter: drop-shadow(8px 12px 6px rgb(0,0,0, 0.5));
 }
 
 #DecorAddButton {
@@ -136,6 +141,7 @@ body {
   width: 2rem;
   height: 2rem;
   min-height: 2rem;
+  filter: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.2));
 }
 
 .emote.float {
