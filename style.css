@@ -56,7 +56,7 @@ body {
   align-content: center;
   padding: 24px;
   z-index: 11;
-  background: rgba(42, 45, 51, 0.5);
+  background: rgba(42, 45, 51, 0.2);
   backdrop-filter: blur(20px);
   border-radius: 12px;
   box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.5);
@@ -139,6 +139,7 @@ body {
   width: 2rem;
   height: 2rem;
   min-height: 2rem;
+  filter: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.2));
 }
 
 .emote.float {
