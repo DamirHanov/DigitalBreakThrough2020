@@ -15,12 +15,18 @@
     <div id='line'></div>
 
     <button id="DecorAddButton" style="display: none;">Редактор уровня</button>
-    <div id="decorations" style="display: none;">
-        <div id="fireplace" class="decor">
-            <img src="./images/fireplace.png">
+    <div id="decorations">
+        <div class="decor">
+            <img data-width="300px" src="./images/clipart-design-wood-4.png">
         </div>
-        <div id="cat" class="decor">
-            <img src="./images/cat.jpeg">
+        <div class="decor">
+            <img data-width="300px" src="./images/poker-table.png">
+        </div>
+        <div class="decor">
+            <img data-width="300px" src="./images/sofa-transparent-fancy-1.png">
+        </div>
+        <div class="decor">
+            <img data-width="300px" src="./images/26-266264_campfire-cartoon-bonfire-clip-art-black-survival-bracelet-outdoor-paracord-flint-fire.png">
         </div>
     </div>
     <script src="./decor.js"></script>
@@ -35,10 +41,8 @@
         <a href='https://www.google.com' target="_blank" class="link">ВКонтакте</a><br>
         <a href='https://www.google.com' target="_blank" class="link">Телеграм</a><br>
     </div>
-    
-    <div id="menu">
 
-    </div>
+    <div id="menu"></div>
 
     <div class='sprite-shadowed' style="position: absolute; left: 1000px; top:100px">
         <img width="300px" src="images/sofa-transparent-fancy-1.png" />
@@ -86,7 +90,7 @@
             personDiv.style.setProperty('--b', b);
             personDiv.style.top = 1000 - 64 + 'px';
             personDiv.style.left = 1000 - 64 + 'px';
-            
+
             personDiv.appendChild(video);
             document.body.appendChild(personDiv);
 
@@ -100,8 +104,7 @@
                 initContextMenu(myPerson);
 
                 sendMyPos(myPerson);
-            }
-            else{
+            } else{
                 var person = document.getElementById(event.userid);
                 initContextMenu(person);
             }
@@ -219,6 +222,18 @@
 
             var myPerson = document.getElementById(connection.userid);
             if (event.userid != connection.userid) {
+                if ('decor' in event.data) {
+                    const img = document.createElement('img');
+                    img.className = 'placed-decor';
+                    img.style.top = event.data.top;
+                    img.style.left = event.data.left;
+                    img.style.width = event.data.width;
+                    img.src = event.data.src;
+                    document.body.appendChild(img);
+                    return;
+                }
+
+
                 var person = document.getElementById(event.data.id);
                 person.style.top = event.data.top;
                 person.style.left = event.data.left;
@@ -241,17 +256,14 @@
         };
 
         function sendMyPos(myPerson) {
-            setInterval(sendData, 2500);
-
-            function sendData(event) {
+            setInterval(() => {
                 connection.send({
                     id: myPerson.id,
                     top: myPerson.style.top,
                     left: myPerson.style.left
                 });
-            }
+            }, 2500);
         }
-        
 
         function distanceBetweenElems(elem1, elem2) {
             var e1Rect = elem1.getBoundingClientRect();
@@ -416,9 +428,11 @@
             }
         }
 
-        modifiedDragDrop(document.getElementById("fireplace"));
-        modifiedDragDrop(document.getElementById("cat"));
-        connection.openOrJoin('asdo8yohjn,amfs');
+        Array.from(document.getElementsByClassName("decor")).forEach(decor => {
+            modifiedDragDrop(decor);
+        });
+
+        connection.openOrJoin('@zoopark_hack1.leadersofdigital.ru');
     </script>
     
 </body>
