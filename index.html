@@ -130,9 +130,6 @@
             person.oncontextmenu = onRightClick;
 
             function onRightClick(e) {
-                //e = e || window.event;
-                //e.preventDefault();
-
                 var context = document.getElementById('context');
                 context.style.visibility = 'visible';
 
@@ -199,25 +196,17 @@
             person.oncontextmenu = onRightClick;
 
             function onRightClick(e) {
-                //e = e || window.event;
-                //e.preventDefault();
-
                 var context = document.getElementById('contextEmotes');
                 context.style.visibility = 'visible';
+                var rect = person.getBoundingClientRect();
+                context.style.left = rect.left + 'px';
+                context.style.top = rect.top - 32 + 'px';
 
-                var button = document.getElementById('btn');
-                button.onclick = routePersons;
-            }
-
-            function routePersons(e) {
-                var context = document.getElementById('contextEmotes');
-                context.style.visibility = 'hidden';
-
-                // var personDiv = document.createElement('span');
-                // personDiv.id = event.userid;
-                // personDiv.className = 'line';
-                // personDiv.appendChild(video);
-                // document.body.appendChild(personDiv);
+                document.body.onclick = function(e) {
+                    if (e.target == document.body) {
+                        context.style.visibility = 'hidden';
+                    }
+                };
             }
         }
         
