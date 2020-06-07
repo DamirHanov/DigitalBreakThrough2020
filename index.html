@@ -35,9 +35,21 @@
         <a href='https://www.google.com' target="_blank" class="link">ВКонтакте</a><br>
         <a href='https://www.google.com' target="_blank" class="link">Телеграм</a><br>
     </div>
+
+    <div id='contextEmotes'>
+        <img src='https://discord.com/assets/08c0a077780263f3df97613e58e71744.svg' class='emote'>
+        <img src='https://discord.com/assets/8359db312f7319a4b0b23415e5fd1392.svg' class='emote'>
+        <img src='https://discord.com/assets/263a7f4eeb6f69e46d969fa479188592.svg' class='emote'>
+        <img src='https://discord.com/assets/f3e307960b1c81de130c429034802618.svg' class='emote'>
+    </div>
     
     <div id="menu">
-
+        <button id='btnCamera' class="btn controls" style="background: #4caf50;">
+            <span class="material-icons">videocam</span>Камера
+        </button>
+        <button id='btnMicrophone' class="btn controls" style="background: #4caf50;">
+            <span class="material-icons">mic</span>Микрофон
+        </button>
     </div>
 
     <div class='sprite-shadowed' style="position: absolute; left: 1000px; top:100px">
@@ -97,7 +109,7 @@
                 myPerson.style.zIndex = 10;
                 myPerson.style.cursor = 'move';
                 dragElement(myPerson);
-                initContextMenu(myPerson);
+                initEmotesContextMenu(myPerson);
 
                 sendMyPos(myPerson);
             }
@@ -140,48 +152,42 @@
                 var myPerson = document.getElementById(connection.userid);
                 var line = document.getElementById('line');
 
-                var refreshIntervalId;
                 setTimeout(function(e) {
                     button.innerHTML = '<span class="material-icons">https</span>Приватная связь установлена!';
                     button.style.background = '#4caf50';
 
-                    refreshIntervalId = setInterval(connectByLine, 10);
-                }, 1500);
+                    var refreshIntervalId = setInterval(connectByLine, 10);
 
-                
-                
-                function connectByLine() {
-                    if (!person) {
-                        line.style.visibility = 'hidden';
-                        clearInterval(refreshIntervalId);
+                    function connectByLine() {
+                        //if (!person) {
+                        //    line.style.visibility = 'hidden';
+                        //    clearInterval(refreshIntervalId);
+                        //}
+                        var off1 = getOffset(myPerson);
+                        var off2 = getOffset(person);
+                        var x1 = off1.left + off1.width / 2;
+                        var y1 = off1.top + off1.height / 2;
+                        var x2 = off2.left + off2.width /2 ;
+                        var y2 = off2.top + off2.width /2;
+                        var length = Math.sqrt(((x2-x1) * (x2-x1)) + ((y2-y1) * (y2-y1)));
+                        var cx = ((x1 + x2) / 2) - (length / 2);
+                        var cy = ((y1 + y2) / 2) - (5 / 2);
+                        var angle = Math.atan2((y1-y2),(x1-x2))*(180/Math.PI);
+                        line.style.cssText = 'padding:0px; margin:0px; height:5px; background:#2196f3; line-height:1px; position:absolute; left:' + cx + 'px; top:' + cy + 'px; width:' + length + 'px; -moz-transform:rotate(' + angle + 'deg); -webkit-transform:rotate(' + angle + 'deg); -o-transform:rotate(' + angle + 'deg); -ms-transform:rotate(' + angle + 'deg); transform:rotate(' + angle + 'deg);';
+                        line.style.visibility = 'visible';
                     }
-                    var off1 = getOffset(myPerson);
-                    var off2 = getOffset(person);
-                    var x1 = off1.left + off1.width / 2;
-                    var y1 = off1.top + off1.height / 2;
-                    var x2 = off2.left + off2.width /2 ;
-                    var y2 = off2.top + off2.width /2;
-                    var length = Math.sqrt(((x2-x1) * (x2-x1)) + ((y2-y1) * (y2-y1)));
-                    var cx = ((x1 + x2) / 2) - (length / 2);
-                    var cy = ((y1 + y2) / 2) - (5 / 2);
-                    var angle = Math.atan2((y1-y2),(x1-x2))*(180/Math.PI);
-                    line.style.cssText = 'padding:0px; margin:0px; height:5px; background:#2196f3; line-height:1px; position:absolute; left:' + cx + 'px; top:' + cy + 'px; width:' + length + 'px; -moz-transform:rotate(' + angle + 'deg); -webkit-transform:rotate(' + angle + 'deg); -o-transform:rotate(' + angle + 'deg); -ms-transform:rotate(' + angle + 'deg); transform:rotate(' + angle + 'deg);';
-                    line.style.visibility = 'visible';
-                }
 
-                function getOffset( el ) {
-                    var rect = el.getBoundingClientRect();
-                    return {
-                        left: rect.left + window.pageXOffset,
-                        top: rect.top + window.pageYOffset,
-                        width: rect.width || el.offsetWidth,
-                        height: rect.height || el.offsetHeight
-                    };
-                }
+                    function getOffset( el ) {
+                        var rect = el.getBoundingClientRect();
+                        return {
+                            left: rect.left + window.pageXOffset,
+                            top: rect.top + window.pageYOffset,
+                            width: rect.width || el.offsetWidth,
+                            height: rect.height || el.offsetHeight
+                        };
+                    }
+                }, 1500);
             }
-
-
-            
         }
 
         function initEmotesContextMenu(person) {
