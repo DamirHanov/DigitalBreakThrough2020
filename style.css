@@ -7,6 +7,7 @@ body {
   height: 2000px;
   background-image: url('images/Textures_Floor_01-600x600.jpg');
   font-family: sans-serif;
+  user-select: none;
 }
 
 .person {
@@ -43,18 +44,29 @@ body {
               0 0 0 2.6rem rgba(var(--r), var(--g), var(--b), 0.2);
 }
 
-.decor {
-  width: 128px;
-  height: 128px;
-  overflow: hidden;
-  display: flex;
-  align-content: center;
-  justify-content: center;
+#decorations {
   position: fixed;
-  top: 64px;
-  left: 12px;
-  box-shadow: none;
-  transition: box-shadow 0.5s ease-in;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  align-content: center;
+  padding: 10px;
+  z-index: 10;
+  background: rgba(42, 45, 51, 0.5);
+  backdrop-filter: blur(20px);
+}
+
+.decor > img {
+  max-width: 128px;
+  max-height: 128px;
+}
+
+
+.placed-decor {
+  position: absolute;
 }
 
 #DecorAddButton {
@@ -193,4 +205,10 @@ body {
 
 .sprite-shadowed {
   filter: drop-shadow(8px 12px 6px rgb(0,0,0, 0.5));
+}
+
+.line {
+  width: 4px;
+  height: 4px;
+  background: darkgreen;
 }
