@@ -113,13 +113,12 @@
             if (event.userid == connection.userid) {
                 window.scroll(1000 - 64 - window.innerWidth / 2, 1000 - 64 - window.innerHeight / 2);
 
-                var myPerson = document.getElementById(event.userid);
-                myPerson.style.zIndex = 10;
-                myPerson.style.cursor = 'move';
-                dragElement(myPerson);
-                initEmotesContextMenu(myPerson);
+                personDiv.style.zIndex = 10;
+                personDiv.style.cursor = 'move';
+                dragElement(personDiv);
+                initEmotesContextMenu(personDiv);
 
-                sendMyPos(myPerson);
+                sendMyPos(personDiv);
             } else{
                 var person = document.getElementById(event.userid);
                 initContextMenu(person);
@@ -233,13 +232,17 @@
             var myPerson = document.getElementById(connection.userid);
             if (event.userid != connection.userid) {
                 if ('decor' in event.data) {
-                    const img = document.createElement('img');
-                    img.className = 'placed-decor';
-                    img.style.top = event.data.top;
-                    img.style.left = event.data.left;
-                    img.style.width = event.data.width;
-                    img.src = event.data.src;
-                    document.body.appendChild(img);
+                    if (document.getElementById(event.data.id) === null) {
+                        const img = document.createElement('img');
+                        img.id = event.data.id;
+                        console.log(event.data.id, img.id);
+                        img.className = 'placed-decor';
+                        img.style.top = event.data.top;
+                        img.style.left = event.data.left;
+                        img.style.width = event.data.width;
+                        img.src = event.data.src;
+                        document.body.appendChild(img);
+                    }
                     return;
                 }
 
@@ -316,20 +319,15 @@
                 var tol = 10;
                 var left = parseInt(elmnt.style.left),
                     top = parseInt(elmnt.style.top);
-                
-                // console.info(left, window.scrollX + window.innerWidth - 128 - tol)
 
                 if (left >= window.scrollX + window.innerWidth - 128 - tol) {
-                    console.info('right', left)
                     if (left >= 2000 - 128) {
                         elmnt.style.left = 2000 - 128 + 'px';
-                        console.log('break;')
                     } else {
                         elmnt.style.left = left + tol + 'px';
                         window.scrollBy(tol, 0);
                     }
                 } else if (left <= window.scrollX + 2 * tol) {
-                    console.info('left')
                     if (window.scrollX === 0) {
                         elmnt.style.left = '5px';
                     } else {
@@ -339,7 +337,6 @@
                 }
 
                 if (top >= window.scrollY + window.innerHeight - 128 - tol) {
-                    console.info('bottom')
                     if (top >= 2000 - 128) {
                         elmnt.style.top = 2000 - 128 + 'px';
                     } else {
@@ -347,7 +344,6 @@
                         window.scrollBy(0, tol);
                     }
                 } else if (top <= window.scrollY + tol) {
-                    console.info('top')
                     if (window.scrollY === 0) {
                         elmnt.style.top = '5px';
                     } else {
